@@ -14,9 +14,36 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
     console.log('New user connected');
-    socket.on('disconnect', () => {
-        console.error('user was disconnected');
+
+    // socket.emit('newEmail', {
+    //     from: "anemailaddy2yahoo.com",
+    //     text: "some email body",
+    //     createdAt: new Date().getTime()
+    // });
+
+    // socket.on('createEmail', function(newEmail) {
+    //     console.log('New email', newEmail);
+    // });
+    // socket.on('disconnect', () => {
+    //     console.error('user was disconnected');
+    // });
+
+    socket.emit('newMessage', {
+        from: "Oke",
+        text: "hey",
+        createdAt: new Date().getTime()
     });
+
+    socket.on('createMessage', function(message) {
+        console.log('New Message', message);
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()
+        });
+    });
+
+
 });
 
 server.listen(port, () => {
