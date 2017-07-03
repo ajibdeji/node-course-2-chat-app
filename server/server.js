@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const { generateMessage } = require('./utils/mesage');
+const { generateMessage } = require('./utils/message');
 
 var app = express();
 var server = http.createServer(app);
@@ -19,9 +19,10 @@ io.on('connection', (socket) => {
 
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));;
 
-    socket.on('createMessage', function(message) {
-        console.log('New Message', message);
-        io.emit('newMessage', generateMessage(from, text));
+    socket.on('createMessage', (theMessage, callback) => {
+        console.log('New Message', theMessage);
+        io.emit('newMessage', generateMessage(theMessage.from, theMessage.text));
+        callback('this is from the server');
         // socket.broadcast.emit('newMessage', {
         //     from: message.from,
         //     text: message.text,
