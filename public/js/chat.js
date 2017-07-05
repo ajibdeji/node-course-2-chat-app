@@ -14,13 +14,17 @@ function scrollToBottom() {
     }
 }
 socket.on('connect', function() {
-    // console.info('connected to the server');
+    var params = $.deparam(window.location.search);
 
-    // socket.emit('createEmail', {
-    //     to: "anemailaddy2yahoo.com",
-    //     text: "some email body for create",
-    //     createdAt: new Date().getTime()
-    // });
+    socket.emit('join', params, function(err) {
+        if (err) {
+            alert(err);
+            window.location.href = '/';
+        } else {
+            console.log('No error');
+        }
+
+    })
 
 });
 socket.on('disconnect', function() {
