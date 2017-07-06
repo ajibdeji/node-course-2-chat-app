@@ -1,13 +1,5 @@
-const _ = require('lodash');
-// [{
-//    id:
-//    name:
-//    room: 
-// }
-
-// ]
-
 class Users {
+
     constructor(name, room) {
         this.users = [];
     }
@@ -33,7 +25,7 @@ class Users {
     }
     getUserList(room) {
         var users = this.users.filter((user) => user.room === room);
-
+        return users;
     }
 
 
