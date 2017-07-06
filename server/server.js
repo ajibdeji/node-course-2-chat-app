@@ -34,8 +34,11 @@ io.on('connection', (socket) => {
 
 
     socket.on('createMessage', (theMessage, callback) => {
-        console.log('New Message', theMessage);
-        io.emit('newMessage', generateMessage(theMessage.from, theMessage.text));
+        var user = users.getUser(socket.id);
+
+        if (user && isRealString(theMessage.text)) {
+            io.to(user.room).emit('newMessage', generateMessage(user.name, theMessage.text));
+        }
         callback('this is from the server');
         // socket.broadcast.emit('newMessage', {
         //     from: message.from,
@@ -45,7 +48,11 @@ io.on('connection', (socket) => {
     });
     // var loc = 'https://www.google.ca/maps/@43.7269521,-79.5931739,16z';
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+        var user = users.getUser(socket.id);
+
+        if (user) {
+            io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+        }
     });
 
     socket.on('disconnect', () => {
